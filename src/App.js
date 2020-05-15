@@ -1,24 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useCallback } from 'react';
+import { useSelector, shallowEqual } from 'react-redux';
+import { DragDropContext } from 'react-beautiful-dnd';
+import Typography from '@material-ui/core/Typography';
+
+import ListBoard from 'components/ListBoard';
+
 import './App.css';
+import AddButton from 'components/AddButton';
 
 function App() {
+  const listState = useSelector((state) => state.listReducer, shallowEqual);
+  const { lists } = listState;
+  console.log(lists);
+
+  const onDragEnd = useCallback((result) => {}, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className='App'>
+      <Typography variant='h4' gutterBottom>
+        Working Board
+      </Typography>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div
+          style={{
+            display: 'flex',
+            overflowX: 'auto',
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          {lists.map((list) => (
+            <ListBoard
+              key={list.id}
+              id={list.id}
+              title={list.title}
+              data={list.cards}
+            />
+          ))}
+          <AddButton list />
+        </div>
+      </DragDropContext>
     </div>
   );
 }

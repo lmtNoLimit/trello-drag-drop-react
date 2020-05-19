@@ -21,10 +21,10 @@ const useStyles = makeStyles({
 
 export default function CardItem(props) {
   const classes = useStyles();
-  const { title, index } = props;
+  const { id, title, index } = props;
 
   return (
-    <Draggable draggableId={title} index={index}>
+    <Draggable draggableId={id + ''} index={index}>
       {(provided) => (
         <Card
           className={classes.root}

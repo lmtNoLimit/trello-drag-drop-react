@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -27,8 +27,9 @@ const useStyles = makeStyles({
   content: {
     padding: 7,
   },
-  block: {
+  cardActionRoot: {
     display: 'block',
+    marginLeft: 0,
   },
 });
 
@@ -48,22 +49,29 @@ export default function ListBoard(props) {
       />
       <Droppable droppableId={id}>
         {(provided) => (
-          <CardContent
-            classes={{ root: classes.content }}
-            innerRef={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {data.map((item, index) => (
-              <CardItem key={index} title={item.title} index={index} />
-            ))}
+          <Fragment>
+            <CardContent
+              classes={{ root: classes.content }}
+              innerRef={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {data.map((item, index) => (
+                <CardItem
+                  key={index}
+                  id={item.id}
+                  title={item.title}
+                  index={index}
+                />
+              ))}
 
-            {provided.placeholder}
-          </CardContent>
+              {provided.placeholder}
+            </CardContent>
+            <CardActions classes={{ root: classes.cardActionRoot }}>
+              <AddButton listId={id} card />
+            </CardActions>
+          </Fragment>
         )}
       </Droppable>
-      <CardActions classes={{ root: classes.block }}>
-        <AddButton card />
-      </CardActions>
     </Card>
   );
 }

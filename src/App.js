@@ -7,13 +7,17 @@ import ListBoard from 'components/ListBoard';
 
 import './App.css';
 import AddButton from 'components/AddButton';
+import { Box } from '@material-ui/core';
 
 function App() {
   const listState = useSelector((state) => state.listReducer, shallowEqual);
   const { lists } = listState;
-  console.log(lists);
 
-  const onDragEnd = useCallback((result) => {}, []);
+  const onDragEnd = useCallback((result) => {
+    // const { source, destination } = result;
+    // const
+    console.log(result);
+  }, []);
 
   return (
     <div className='App'>
@@ -21,7 +25,7 @@ function App() {
         Working Board
       </Typography>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div
+        <Box
           style={{
             display: 'flex',
             overflowX: 'auto',
@@ -35,8 +39,10 @@ function App() {
               data={list.cards}
             />
           ))}
-          <AddButton list />
-        </div>
+          <Box>
+            <AddButton list />
+          </Box>
+        </Box>
       </DragDropContext>
     </div>
   );

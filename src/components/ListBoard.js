@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 
 export default function ListBoard(props) {
   const classes = useStyles();
-  const { id, title, data } = props;
+  const { id, title, cards } = props;
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -47,23 +47,22 @@ export default function ListBoard(props) {
         title={title}
         classes={{ title: classes.title }}
       />
-      <Droppable droppableId={id}>
+      <Droppable droppableId={`${id}`}>
         {(provided) => (
           <Fragment>
             <CardContent
               classes={{ root: classes.content }}
-              innerRef={provided.innerRef}
               {...provided.droppableProps}
+              innerRef={provided.innerRef}
             >
-              {data.map((item, index) => (
+              {cards.map((card, index) => (
                 <CardItem
-                  key={index}
-                  id={item.id}
-                  title={item.title}
+                  key={card.id}
+                  id={card.id}
+                  title={card.title}
                   index={index}
                 />
               ))}
-
               {provided.placeholder}
             </CardContent>
             <CardActions classes={{ root: classes.cardActionRoot }}>

@@ -1,30 +1,45 @@
 import React, { useCallback } from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
-import Typography from '@material-ui/core/Typography';
+import { Box, Typography } from '@material-ui/core';
+
+import { reorderCard } from 'store/Card/actions';
 
 import ListBoard from 'components/ListBoard';
+import AddButton from 'components/AddButton';
 
 import './App.css';
-import AddButton from 'components/AddButton';
-import { Box } from '@material-ui/core';
 
 function App() {
+  const dispatch = useDispatch();
   const listState = useSelector((state) => state.listReducer, shallowEqual);
   const { lists } = listState;
 
-  const onDragEnd = useCallback((result) => {
-    // const { source, destination } = result;
-    // const
-    console.log(result);
-  }, []);
+  const onDragEnd = useCallback(
+    (result) => {
+      const { source, destination, draggableId } = result;
+      if (!destination) {
+        return;
+      }
+      if (
+        source.droppableId === destination.droppableId &&
+        source.index === destination.index
+      ) {
+        return;
+      }
+      console.log(result);
+
+      dispatch(reorderCard(source, destination, draggableId));
+    },
+    [dispatch]
+  );
 
   return (
     <div className='App'>
-      <Typography variant='h4' gutterBottom>
-        Working Board
-      </Typography>
       <DragDropContext onDragEnd={onDragEnd}>
+        <Typography variant='h4' gutterBottom>
+          Working Board
+        </Typography>
         <Box
           style={{
             display: 'flex',
@@ -36,7 +51,7 @@ function App() {
               key={list.id}
               id={list.id}
               title={list.title}
-              data={list.cards}
+              cards={list.cards}
             />
           ))}
           <Box>

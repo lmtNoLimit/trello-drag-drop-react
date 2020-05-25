@@ -24,7 +24,7 @@ export default function CardItem(props) {
   const { id, title, index } = props;
 
   return (
-    <Draggable draggableId={id + ''} index={index}>
+    <Draggable draggableId={`${id}`} index={index}>
       {(provided) => (
         <Card
           className={classes.root}
